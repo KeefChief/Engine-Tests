@@ -1,0 +1,87 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-pthread",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "build/commands.o",
+      "source/commands.c"
+    ],
+    "directory": "/home/elouan/Documents/Engine-Tests",
+    "file": "/home/elouan/Documents/Engine-Tests/source/commands.c",
+    "output": "/home/elouan/Documents/Engine-Tests/build/commands.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-pthread",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "build/console.o",
+      "source/console.c"
+    ],
+    "directory": "/home/elouan/Documents/Engine-Tests",
+    "file": "/home/elouan/Documents/Engine-Tests/source/console.c",
+    "output": "/home/elouan/Documents/Engine-Tests/build/console.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-pthread",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "build/entity.o",
+      "source/entity.c"
+    ],
+    "directory": "/home/elouan/Documents/Engine-Tests",
+    "file": "/home/elouan/Documents/Engine-Tests/source/entity.c",
+    "output": "/home/elouan/Documents/Engine-Tests/build/entity.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-pthread",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "build/entity_defs.o",
+      "source/entity_defs.c"
+    ],
+    "directory": "/home/elouan/Documents/Engine-Tests",
+    "file": "/home/elouan/Documents/Engine-Tests/source/entity_defs.c",
+    "output": "/home/elouan/Documents/Engine-Tests/build/entity_defs.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-pthread",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "build/main.o",
+      "source/main.c"
+    ],
+    "directory": "/home/elouan/Documents/Engine-Tests",
+    "file": "/home/elouan/Documents/Engine-Tests/source/main.c",
+    "output": "/home/elouan/Documents/Engine-Tests/build/main.o"
+  }
+]

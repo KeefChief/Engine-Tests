@@ -1,7 +1,6 @@
 TARGET = engine
 CC = gcc
-CFLAGS = -Wall -Wextra -g -pthread -Iinclude -Ibackend
-LFLAGS = -L backend -lraylib -lopengl32 -lgdi32 -lwinmm
+CFLAGS = -Wall -Wextra -g -pthread -Iinclude 
 SRC = $(wildcard source/*.c)
 OBJ = $(SRC:source/%.c=build/%.o)
 

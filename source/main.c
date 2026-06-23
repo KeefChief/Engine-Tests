@@ -1,7 +1,6 @@
 #include <pthread.h>
 #include <stdio.h>
 #include "console.h"
-#include "raylib.h"
 
 int main(int argc, char** argv){
     if(init_console()){
@@ -10,14 +9,7 @@ int main(int argc, char** argv){
     }
     printf("initialized console\n");
 
-    InitWindow(320, 240, "TEST");
-    SetTargetFPS(30);
-
-    while(!WindowShouldClose()){
-        BeginDrawing();
-        ClearBackground(BLACK);
-        DrawFPS(10, 10);
-        EndDrawing();
+    while(1){
         execute_commands();
     }
 
