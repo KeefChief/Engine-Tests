@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <string.h>
+#include <stdatomic.h>
 #include "console.h"
 #include "commands.h"
 
@@ -48,5 +49,6 @@ void execute_commands(){
 }
 
 void terminate_console(){
+    pthread_cancel(c);
     pthread_join(c, NULL);
 }

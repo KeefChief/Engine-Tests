@@ -1,6 +1,7 @@
 TARGET = engine
 CC = gcc
-CFLAGS = -Wall -Wextra -g -pthread -Iinclude 
+CFLAGS = -Wall -Wextra -g -pthread -Iinclude -I../MyDisplaySTuff/include/ -fsanitize=address -fno-omit-frame-pointer 
+LFLAGS = -L../MyDisplaySTuff/build -fsanitize=address -lX11 -lpmm
 SRC = $(wildcard source/*.c)
 OBJ = $(SRC:source/%.c=build/%.o)
 

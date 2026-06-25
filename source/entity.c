@@ -16,7 +16,7 @@ void create_entity(int x, int y, int vx, int vy, int type_id){
     g_entities[n].y = y;
     g_entities[n].vx = vx;
     g_entities[n].vy = vy;
-    printf("Instantiated entity of type: \"%s\" at:\nx: %d\ny%d\n", g_entity_defs[type_id].name, x, y);
+    printf("Instantiated entity of type: \"%s\" at:\nx: %d\ny: %d\n", g_entity_defs[type_id].name, x, y);
 }
 
 void set_specific_data(int n, int type_id){

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define MAX_ENTITIES 2048
+#define MAX_ENTITIES 512
 
 enum {
     ENTF_ALIVE = (1 << 0),
