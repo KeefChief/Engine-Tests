@@ -1,8 +1,8 @@
 #include <pthread.h>
 #include <stdio.h>
 #include "console.h"
+#include "maps.h"
 #include "platform.h"
-#include "tilesets.h"
 
 int main(void){
     if(init_console()){
@@ -16,7 +16,7 @@ int main(void){
 
     Image test = LoadImage(p, "resources/test.png"); 
 
-    Tileset *set = LoadTileset(p, "resources/test.png");
+    LoadMap(p, "resources/maps/test.mph");
 
     Rect rect = {0, 0, 16, 16};
 
@@ -24,7 +24,9 @@ int main(void){
 	ConsumeInput(&p);
 	PutSrpite(p, test, rect, rect);
         execute_commands();
+	PutMap(p);
 	PresentPlatform(p);
+	LimitFramerate(p);
     }
 
     QuitPlatform(p);

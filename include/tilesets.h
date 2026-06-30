@@ -3,8 +3,9 @@
 #include "platform.h"
 
 typedef struct Tileset{
-    Image tex;
+    Image img;
     const char *name;
+    const char *path;
     int w;
     int h;
 }Tileset;
@@ -15,3 +16,4 @@ typedef struct TilesetMan{
 }TilesetMan;
 
 Tileset *LoadTileset(Platform p, const char *path);
+Tileset *GetTilesetFromPath(Platform p, const char *path);

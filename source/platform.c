@@ -1,14 +1,19 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_surface.h>
+#include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_image.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include "platform.h"
 #include "commondefines.h"
 #include "consts.h"
+#include "tilesets.h"
 
 struct PlatformBackend{
     SDL_Renderer *ren;
@@ -22,6 +27,8 @@ struct ImageBackend{
 
 Platform InitPlatform(){
     Platform p = {0};
+    p.frame_start = SDL_GetPerformanceCounter();
+    p.perf_freq =SDL_GetPerformanceFrequency();
     p.running = 1;
     p.gameRect = (Rect){0, 0, SCREENW, SCREENH};
     p.backend = malloc(sizeof(*p.backend));
@@ -66,6 +73,10 @@ void PutSrpite(Platform p, Image img, Rect src, Rect dst){
     SDL_RenderCopy(p.backend->ren, img.backend->tex, &srcrect, &dstrect);
 }
 
+void GetImageSize(int *w, int *h, Image img){
+    SDL_QueryTexture(img.backend->tex, NULL, NULL, w, h);
+}
+
 void PresentPlatform(Platform p){
     SDL_RenderPresent(p.backend->ren);
     SDL_SetRenderDrawColor(p.backend->ren, 28, 28, 48, 0);
@@ -75,8 +86,45 @@ void PresentPlatform(Platform p){
     SDL_RenderFillRect(p.backend->ren, &gameRect);
 }
 
-Image CreateBatch(unsigned char *data, const char* tileset){
-    
+Image CreateBatch(Platform p, unsigned char *data, const char* tileset_path, int tile_size, int w, int h){
+    Tileset *tileset = GetTilesetFromPath(p, tileset_path); 
+    SDL_Rect dstrect = {0, 0, tile_size, tile_size};
+    SDL_Rect srcrect = {0, 0, tile_size, tile_size};
+    SDL_Texture *tex = SDL_CreateTexture(p.backend->ren, 
+	    SDL_PIXELFORMAT_RGBA8888, 
+	    SDL_TEXTUREACCESS_TARGET, 
+	    w * tile_size, 
+	    h * tile_size);
+    SDL_SetRenderTarget(p.backend->ren, tex);
+    for(int y = 0; y < h; y++){
+	for(int x = 0; x < w; x++){
+	    dstrect.x = x * tile_size;
+	    dstrect.y = y * tile_size;
+	    unsigned char cur = data[(y * w) + x];
+	    srcrect.x = (cur / tileset->w) * tile_size;
+	    srcrect.y = (cur % tileset->w) * tile_size;
+	    printf("Src X: %d Src Y: %d\n", srcrect.x, srcrect.y);  
+	    SDL_RenderCopy(p.backend->ren, tileset->img.backend->tex, &srcrect, &dstrect);
+	}
+    }
+    SDL_SetRenderTarget(p.backend->ren, NULL);
+    Image batch;
+    batch.backend = malloc(sizeof(*batch.backend));
+    batch.backend->tex = tex;
+    return batch;
+}
+
+void LimitFramerate(Platform p){
+    Uint64 frame_end = SDL_GetPerformanceCounter();
+    double elapsed = (double)(frame_end - p.frame_start) / (double)p.perf_freq;
+    double target = 1.0 / TARGET_FPS;
+    if(elapsed < target){
+	SDL_Delay((Uint32)((target - elapsed) * 1000.0));
+    }
+    double frame_time = (double)(frame_end - p.frame_start) / (double)p.perf_freq;
+    p.frame_start = SDL_GetPerformanceCounter();
+    double fps = 1.0 / frame_time;
+    printf("Fps: %.1f\n", fps);
 }
 
 void QuitPlatform(Platform p){
