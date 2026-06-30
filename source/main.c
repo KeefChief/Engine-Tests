@@ -2,8 +2,9 @@
 #include <stdio.h>
 #include "console.h"
 #include "platform.h"
+#include "tilesets.h"
 
-int main(int argc, char** argv){
+int main(void){
     if(init_console()){
         printf("failed to initialize console\n");
         return 1;
@@ -11,27 +12,23 @@ int main(int argc, char** argv){
 
     printf("initialized console\n");
 
-    Platform_Window *win = platform_init_window(640, 480, "AAAAAA");
-    printf("Initialized window !\n");
-    Event e;
+    Platform p = InitPlatform();
 
-    int running = 1;
+    Image test = LoadImage(p, "resources/test.png"); 
 
-    while(running){
-	while(platform_get_event(&e, win)){
-	    switch(e.type){
-		case WINDOW_CLOSED:
-		    printf("Window closed !\n");
-		    running = 0;
-		    break;
-	    }
-	}
+    Tileset *set = LoadTileset(p, "resources/test.png");
+
+    Rect rect = {0, 0, 16, 16};
+
+    while(p.running){
+	ConsumeInput(&p);
+	PutSrpite(p, test, rect, rect);
         execute_commands();
+	PresentPlatform(p);
     }
 
-    platform_close_window(win);
+    QuitPlatform(p);
     terminate_console();
-
     printf("terminated console\n");
     return 0;
 }
