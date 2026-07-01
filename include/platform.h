@@ -24,5 +24,5 @@ void PutSrpite(Platform p, Image img, Rect src, Rect dst);
 void GetImageSize(int *w, int *h, Image img);
 Image CreateBatch(Platform p, unsigned char *data, const char* tileset_path, int tile_size, int w, int h);
 void PresentPlatform(Platform p);
-void LimitFramerate(Platform p);
+void LimitFramerate(Platform *p);
 void QuitPlatform(Platform p);

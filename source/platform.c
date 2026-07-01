@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
@@ -13,6 +14,7 @@
 #include "platform.h"
 #include "commondefines.h"
 #include "consts.h"
+#include "input.h"
 #include "tilesets.h"
 
 struct PlatformBackend{
@@ -24,6 +26,17 @@ struct PlatformBackend{
 struct ImageBackend{
     SDL_Texture *tex;
 };
+
+static Key GetKeyFromEvent(SDL_Event e){
+    switch(e.key.keysym.sym){
+	case SDLK_z: return KEY_UP;
+	case SDLK_s: return KEY_DOWN;
+	case SDLK_q: return KEY_LEFT;
+	case SDLK_d: return KEY_RIGHT;
+	case SDLK_SPACE: return KEY_JUMP;
+    }
+    return KEY_UNKNOWN;
+}
 
 Platform InitPlatform(){
     Platform p = {0};
@@ -40,10 +53,17 @@ Platform InitPlatform(){
 }
 
 void ConsumeInput(Platform *p){
+    UpdateInput();
     while(SDL_PollEvent(&p->backend->e)){
 	switch(p->backend->e.type){
 	    case SDL_QUIT:
 		p->running = 0;
+		break;
+	    case SDL_KEYDOWN:
+		SetKeyDown(GetKeyFromEvent(p->backend->e));
+		break;
+	    case SDL_KEYUP:
+		SetKeyUp(GetKeyFromEvent(p->backend->e));
 		break;
 	}
     }
@@ -101,8 +121,8 @@ Image CreateBatch(Platform p, unsigned char *data, const char* tileset_path, int
 	    dstrect.x = x * tile_size;
 	    dstrect.y = y * tile_size;
 	    unsigned char cur = data[(y * w) + x];
-	    srcrect.x = (cur / tileset->w) * tile_size;
-	    srcrect.y = (cur % tileset->w) * tile_size;
+	    srcrect.x = (cur % tileset->w) * tile_size;
+	    srcrect.y = (cur / tileset->w) * tile_size;
 	    printf("Src X: %d Src Y: %d\n", srcrect.x, srcrect.y);  
 	    SDL_RenderCopy(p.backend->ren, tileset->img.backend->tex, &srcrect, &dstrect);
 	}
@@ -114,17 +134,15 @@ Image CreateBatch(Platform p, unsigned char *data, const char* tileset_path, int
     return batch;
 }
 
-void LimitFramerate(Platform p){
+void LimitFramerate(Platform *p){
     Uint64 frame_end = SDL_GetPerformanceCounter();
-    double elapsed = (double)(frame_end - p.frame_start) / (double)p.perf_freq;
+    double elapsed = (double)(frame_end - p->frame_start) / p->perf_freq;
     double target = 1.0 / TARGET_FPS;
     if(elapsed < target){
 	SDL_Delay((Uint32)((target - elapsed) * 1000.0));
     }
-    double frame_time = (double)(frame_end - p.frame_start) / (double)p.perf_freq;
-    p.frame_start = SDL_GetPerformanceCounter();
-    double fps = 1.0 / frame_time;
-    printf("Fps: %.1f\n", fps);
+    frame_end = SDL_GetPerformanceCounter();
+    p->frame_start = SDL_GetPerformanceCounter();
 }
 
 void QuitPlatform(Platform p){

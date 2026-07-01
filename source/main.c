@@ -26,7 +26,7 @@ int main(void){
         execute_commands();
 	PutMap(p);
 	PresentPlatform(p);
-	LimitFramerate(p);
+	LimitFramerate(&p);
     }
 
     QuitPlatform(p);

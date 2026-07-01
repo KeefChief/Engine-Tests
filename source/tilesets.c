@@ -25,6 +25,7 @@ Tileset *LoadTileset(Platform p, const char *path){
     GetImageSize(&w, &h, tileset->img);
     tileset->w = w / TILE_SIZE;
     tileset->h = h / TILE_SIZE;
+    printf("Tileset w: %d\n Tileset h: %d\n", w, h);
     return tileset;
 }
 
